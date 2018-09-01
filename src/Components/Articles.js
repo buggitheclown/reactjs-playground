@@ -224,6 +224,106 @@ class ATextComments extends Component{
   }
 }
 
+class AEmbeddedImages extends Component{
+  constructor(props){
+    super(props);
+
+    this.state=({img1: "http://placekitten.com/480/480", img2: "http://placekitten.com/420/420", img3: "http://placekitten.com/420/420"})
+    this.switchImage = this.switchImage.bind(this);
+  }
+
+  switchImage(imageIndex){
+    switch (imageIndex){
+      case 1:
+      let link = this.state.img1;
+      if (link === "http://placekitten.com/480/480"){
+        link = "https://i.pinimg.com/originals/f6/e9/f1/f6e9f16677ef864836f4b5bc2bc25b54.jpg";
+      }
+      else{
+        link = "http://placekitten.com/480/480";
+      }
+      this.setState({img1: link});
+      break;
+      default:
+      break;
+    }
+  }
+
+  render(){
+    let content =
+    <div>
+      <h3>No <code>&lt;figure&gt;</code> element</h3>
+      <p><img src={this.state.img1} alt="Alt text" onClick={this.switchImage.bind(this, 1)}/></p>
+      <h3>Wrapped in a <code>&lt;figure&gt;</code> element, no <code>&lt;figcaption&gt;</code></h3>
+      <figure><img src={this.state.img2} alt="Alt text"/></figure>
+      <h3>Wrapped in a <code>&lt;figure&gt;</code> element, with a <code>&lt;figcaption&gt;</code></h3>
+      <figure>
+        <img src={this.state.img3} alt="Alt text"/>
+        <figcaption>Here is a caption for this image.</figcaption>
+      </figure>
+    </div>
+    return(
+      <ATemplate identifier={this.props.identifier} desc={this.props.desc} content={content}/>
+    );
+  }
+}
+
+class AEmbeddedAudio extends Component{
+  render(){
+    let content =
+  <div><audio controls src="https://www.mfiles.co.uk/mp3-downloads/rachmaninoff-prelude-in-c-sharp-minor.mp3">audio</audio></div>
+    return(
+      <ATemplate identifier={this.props.identifier} desc={this.props.desc} content={content}/>
+    );
+  }
+}
+
+class AEmbeddedVideo extends Component{
+  render(){
+    let content =
+    <div><video controls src="http://file-examples.com/wp-content/uploads/2017/04/file_example_MP4_480_1_5MG.mp4">video</video></div>
+    return(
+      <ATemplate identifier={this.props.identifier} desc={this.props.desc} content={content}/>
+    );
+  }
+}
+
+class AEmbeddedCanvas extends Component{
+  /*
+   Source:
+   https://blog.cloudboost.io/using-html5-canvas-with-react-ff7d93f5dc76?gi=2fb0e509e969
+   */
+  constructor(props){
+    super(props);
+
+    this.state = ({cheese: "https://i0.wp.com/www.onegreenplanet.org/wp-content/uploads/2015/08/cheese.jpg?fit=1200%2C800"})
+  }
+
+  componentDidMount() {
+      const canvas = this.refs.canvas;
+      const ctx = canvas.getContext("2d");
+      const img = this.refs.image;
+
+      img.onload = () => {
+      ctx.drawImage(img, 0, 0);
+      ctx.font = "40px Courier";
+      ctx.fillText(this.props.text, 210, 75);
+    }
+    }
+
+  render(){
+    let content =
+    <div>
+    <canvas width={640} height={425} ref="canvas">canvas</canvas>
+    <img alt="cheese" ref="image" src={this.state.cheese} className="hidden" />
+    </div>
+
+    return(
+      <ATemplate identifier={this.props.identifier} desc={this.props.desc} content={content}/>
+    );
+  }
+}
+
 export {
   ATextHeadings,
   ATextParagraphs,
@@ -233,5 +333,9 @@ export {
   ATextTables,
   ATextCode,
   ATextInline,
-  ATextComments
+  ATextComments,
+  AEmbeddedImages,
+  AEmbeddedAudio,
+  AEmbeddedVideo,
+  AEmbeddedCanvas
 }

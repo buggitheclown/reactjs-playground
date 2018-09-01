@@ -38,6 +38,10 @@ class App extends Component {
           </section>
           <section id={this.id([1])}>
             <header><h1>{this.desc([1])}</h1></header>
+            <Articles.AEmbeddedImages identifier={this.id([1,0])} desc={this.desc([1,0])}/>
+            <Articles.AEmbeddedAudio identifier={this.id([1,1])} desc={this.desc([1,1])}/>
+            <Articles.AEmbeddedVideo identifier={this.id([1,2])} desc={this.desc([1,2])}/>
+            <Articles.AEmbeddedCanvas identifier={this.id([1,3])} desc={this.desc([1,3])}/>
           </section>
           <section id={this.id([2])}>
             <header><h1>{this.desc([2])}</h1></header>
