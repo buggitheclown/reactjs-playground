@@ -42,6 +42,10 @@ class App extends Component {
             <Articles.AEmbeddedAudio identifier={this.id([1,1])} desc={this.desc([1,1])}/>
             <Articles.AEmbeddedVideo identifier={this.id([1,2])} desc={this.desc([1,2])}/>
             <Articles.AEmbeddedCanvas identifier={this.id([1,3])} desc={this.desc([1,3])}/>
+            <Articles.AEmbeddedMeter identifier={this.id([1,4])} desc={this.desc([1,4])}/>
+            <Articles.AEmbeddedProgress identifier={this.id([1,5])} desc={this.desc([1,5])}/>
+            <Articles.AEmbeddedSvg identifier={this.id([1,6])} desc={this.desc([1,6])}/>
+            <Articles.AEmbeddedIFrame identifier={this.id([1,7])} desc={this.desc([1,7])}/>
           </section>
           <section id={this.id([2])}>
             <header><h1>{this.desc([2])}</h1></header>

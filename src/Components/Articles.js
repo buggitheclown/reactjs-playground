@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import logger from "../UtilityFiles/Logger.js";
 
 class ATemplate extends Component{
   render(){
@@ -200,7 +201,7 @@ class ATextInline extends Component{
       <p>The <dfn>dfn element</dfn> indicates a definition.</p>
       <p>The <mark>mark element</mark> indicates a highlight.</p>
       <p>The <var>variable element</var>, such as <var>x</var> = <var>y</var>.</p>
-      <p>The time element: <time datetime="2013-04-06T12:32+00:00">2 weeks ago</time></p>
+      <p>The time element: <time dateTime="2013-04-06T12:32+00:00">2 weeks ago</time></p>
     </div>
     return(
       <ATemplate identifier={this.props.identifier} desc={this.props.desc} content={content}/>
@@ -324,6 +325,121 @@ class AEmbeddedCanvas extends Component{
   }
 }
 
+class AEmbeddedMeter extends Component{
+  constructor(props){
+    super(props);
+    this.state = ({meter: 1});
+
+    this.loadMeter = this.loadMeter.bind(this);
+  }
+
+  componentDidMount(){
+    var interval = setInterval(this.loadMeter, 2000);
+    this.setState({interval: interval});
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.state.interval);
+  }
+
+  loadMeter(){
+    let newMeter = Math.floor((Math.random() * 11));
+
+    this.setState({meter: newMeter});
+  }
+
+  render(){
+    let content =
+    <div>
+    <meter value={this.state.meter} min="0" max="10" low="4" high="8">{this.state.meter+" out of 10"}</meter>
+    <p>{this.state.meter}</p>
+    </div>
+    return(
+      <ATemplate identifier={this.props.identifier} desc={this.props.desc} content={content}/>
+    );
+  }
+}
+
+class AEmbeddedProgress extends Component{
+  constructor(props){
+    super(props);
+    this.state = ({meter: 10});
+
+    this.loadMeter = this.loadMeter.bind(this);
+  }
+
+  componentDidMount(){
+    var interval = setInterval(this.loadMeter, 2000);
+    this.setState({interval: interval});
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.state.interval);
+  }
+
+  loadMeter(){
+    let currentMeter = parseInt(this.state.meter,10);
+    let newProgress = Math.floor((Math.random() * (50-5))+5);
+    let newMeter = currentMeter;
+    if (currentMeter===100){
+      newMeter=0;
+    }
+    else if (currentMeter+newProgress>100){
+      newMeter=100;
+    }
+    else {
+      newMeter = currentMeter+newProgress;
+    }
+    this.setState({meter: newMeter.toString()});
+  }
+
+  render(){
+    let content =
+    <div><progress value={this.state.meter} max="100">progress</progress></div>
+    return(
+      <ATemplate identifier={this.props.identifier} desc={this.props.desc} content={content}/>
+    );
+  }
+}
+
+class AEmbeddedSvg extends Component{
+  render(){
+    let content =
+    <div>
+    <svg width="200px" height="200px">
+    <defs>
+    <linearGradient id="Gradient2" x1="0" x2="0.75" y1="0" y2="0.3">
+        <stop offset="0%" stopColor="red"/>
+        <stop offset="50%" stopColor="black" stopOpacity="0"/>
+        <stop offset="100%" stopColor="blue"/>
+      </linearGradient>
+   </defs>
+    <circle cx="100" cy="100" r="100" fill="url(#Gradient2)"></circle>
+    </svg>
+    </div>
+    return(
+      <ATemplate identifier={this.props.identifier} desc={this.props.desc} content={content}/>
+    );
+  }
+}
+
+class AEmbeddedIFrame extends Component{
+  //Avoid IFrames: https://www.ostraining.com/blog/webdesign/against-using-iframes/
+  render(){
+    let content =
+    <div>
+    <iframe title="This frame's title" src="index.html" height="300"></iframe>
+    {/* To link another site using an IFrame (note: most dont allow this):
+      <iframe src="demo_iframe.htm" name="iframe_a"></iframe>
+
+    <p><a href="https://www.leo.org" target="iframe_a">W3Schools.com</a></p> */}
+    </div>
+    return(
+      <ATemplate identifier={this.props.identifier} desc={this.props.desc} content={content}/>
+    );
+  }
+}
+
 export {
   ATextHeadings,
   ATextParagraphs,
@@ -337,5 +453,9 @@ export {
   AEmbeddedImages,
   AEmbeddedAudio,
   AEmbeddedVideo,
-  AEmbeddedCanvas
+  AEmbeddedCanvas,
+  AEmbeddedMeter,
+  AEmbeddedProgress,
+  AEmbeddedSvg,
+  AEmbeddedIFrame
 }
