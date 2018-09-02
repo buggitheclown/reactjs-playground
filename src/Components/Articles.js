@@ -457,9 +457,5 @@ export {
   AEmbeddedMeter,
   AEmbeddedProgress,
   AEmbeddedSvg,
-<<<<<<< HEAD
-  /*AEmbeddedIFrame*/
-=======
-  //AEmbeddedIFrame
->>>>>>> test
+  AEmbeddedIFrame
 }
