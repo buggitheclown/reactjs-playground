@@ -440,6 +440,97 @@ class AEmbeddedIFrame extends Component{
   }
 }
 
+class AInputText extends Component{
+  constructor(props){
+    super(props);
+
+    this.state = ({iText: "",iNumber: "", iPassword: ""})
+    this.handleChange = this.handleChange.bind(this);
+    this.spellInput = this.spellInput.bind(this);
+  }
+
+  handleChange(event){
+    let newValue = event.target.value;
+    if (event.target.id === "input__text"){
+      newValue = newValue.replace(' ','');
+      this.setState({iText: newValue});
+    }
+    if(event.target.id === "input__password"){
+      if (newValue==="asdfg12345!"){
+        window.location = "https://fineleatherjackets.net/realhuman/bean/";
+      }
+      this.setState({iPassword: newValue});
+    }
+    //When someone enters a non-numerical input into a input type=number field the value is ""
+    //This means as long as the new value isn't "" you can update the state
+    if (event.target.id === "input__text2"&&newValue!==""){
+      this.setState({iNumber: newValue})
+    }
+  }
+
+  spellInput(){
+    let result = "";
+    let input = this.state.iText.toUpperCase();
+    for (let i=0; i<input.length; i++){
+      result+=" "+input.charAt(i);
+    }
+    return result;
+  }
+
+  render(){
+    let content =
+    <form>
+      <fieldset id="forms__input">
+        <legend>Input fields</legend>
+        <div>
+        <p>
+          <label htmlFor="input__text">The word </label>
+          <input id="input__text" type="text" placeholder="Text Input" value={this.state.iText} onChange={this.handleChange}/>
+           {" is spelled"+this.spellInput()}
+        </p>
+        <p>
+          <label htmlFor="input__password">Password </label>
+          <input id="input__password" value={this.state.iPassword} onChange={this.handleChange} type="password" placeholder="Type your Password"/>
+        </p>
+        <i>Type asdfg12345! to prove that you are a real human bean</i>
+        <p>
+          <label htmlFor="input__webaddress">Web Address </label>
+          <input id="input__webaddress" type="url" placeholder="https://fineleatherjackets.net/realhuman/"/>
+        </p>
+        <p>
+          <label htmlFor="input__emailaddress">Email Address </label>
+          <input id="input__emailaddress" type="email" placeholder="name@email.com"/>
+        </p>
+        <p>
+          <label htmlFor="input__phone">Phone Number </label>
+          <input id="input__phone" type="tel" placeholder="(999) 999-9999"/>
+        </p>
+        <p>
+          <label htmlFor="input__search">Search </label>
+          <input id="input__search" type="search" placeholder="Enter Search Term"/>
+        </p>
+        <p>
+          <label htmlFor="input__text2">Number Input</label>
+          <input id="input__text2" value={this.state.iNumber} onChange={this.handleChange} type="number" placeholder="Enter a Number"/>
+        </p>
+        <p>
+          <label htmlFor="input__text3" className="error">Error </label>
+          <input id="input__text3" className="is-error" type="text" placeholder="Text Input"/>
+        </p>
+        <p>
+          <label htmlFor="input__text4" className="valid">Valid </label>
+          <input id="input__text4" className="is-valid" type="text" placeholder="Text Input"/>
+        </p>
+        </div>
+      </fieldset>
+    </form>
+    return(
+      <ATemplate identifier={this.props.identifier} desc={this.props.desc} content={content}/>
+    );
+  }
+}
+
+
 export {
   ATextHeadings,
   ATextParagraphs,
@@ -457,5 +548,6 @@ export {
   AEmbeddedMeter,
   AEmbeddedProgress,
   AEmbeddedSvg,
-  AEmbeddedIFrame
+  AEmbeddedIFrame,
+  AInputText
 }

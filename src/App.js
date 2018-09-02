@@ -49,6 +49,7 @@ class App extends Component {
           </section>
           <section id={this.id([2])}>
             <header><h1>{this.desc([2])}</h1></header>
+            <Articles.AInputText identifier={this.id([2,0])} desc={this.desc([2,0])}/>
           </section>
         </main>
       </div>
