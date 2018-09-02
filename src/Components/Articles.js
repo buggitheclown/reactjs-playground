@@ -14,6 +14,17 @@ class ATemplate extends Component{
   }
 }
 
+class AFormTemplate extends Component{
+  render(){
+    return(
+      <fieldset id={this.props.identifier}>
+        <legend>{this.props.desc}</legend>
+        {this.props.content}
+      </fieldset>
+    );
+  }
+}
+
 class ATextHeadings extends Component{
   render(){
     let content =
@@ -455,7 +466,7 @@ class AInputText extends Component{
       newValue = newValue.replace(' ','');
       this.setState({iText: newValue});
     }
-    if(event.target.id === "input__password"){
+    else if(event.target.id === "input__password"){
       if (newValue==="asdfg12345!"){
         window.location = "https://fineleatherjackets.net/realhuman/bean/";
       }
@@ -463,7 +474,7 @@ class AInputText extends Component{
     }
     //When someone enters a non-numerical input into a input type=number field the value is ""
     //This means as long as the new value isn't "" you can update the state
-    if (event.target.id === "input__text2"&&newValue!==""){
+    else if (event.target.id === "input__text2"&&newValue!==""){
       this.setState({iNumber: newValue})
     }
   }
@@ -479,9 +490,6 @@ class AInputText extends Component{
 
   render(){
     let content =
-    <form>
-      <fieldset id="forms__input">
-        <legend>Input fields</legend>
         <div>
         <p>
           <label htmlFor="input__text">The word </label>
@@ -522,10 +530,122 @@ class AInputText extends Component{
           <input id="input__text4" className="is-valid" type="text" placeholder="Text Input"/>
         </p>
         </div>
-      </fieldset>
-    </form>
     return(
-      <ATemplate identifier={this.props.identifier} desc={this.props.desc} content={content}/>
+      <AFormTemplate identifier={this.props.identifier} desc={this.props.desc} content={content}/>
+    );
+  }
+}
+
+class AInputSelect extends Component{
+  constructor(props){
+    super(props);
+    this.state=({optionsExist: true, iFood: "", iOption: "", selectedOption: 1, optionsAndValues: [[0,"Fruit","Apples"],[1,"Veggies","Carrots"],[2,"Berries","Raspberry"]]});
+
+    this.createOption=this.createOption.bind(this);
+    this.deleteOption=this.deleteOption.bind(this);
+    this.changeOption=this.changeOption.bind(this);
+    this.handleChange=this.handleChange.bind(this);
+    this.renderOptions=this.renderOptions.bind(this);
+  }
+
+  handleChange(event){
+    let newValue = event.target.value;
+    if (event.target.id === "input__foodOption"){
+      this.setState({iOption: newValue});
+    }
+    else if(event.target.id === "input__food"){
+      this.setState({iFood: newValue});
+    }
+  }
+
+  changeOption(event){
+    this.setState({selectedOption: event.target.value});
+  }
+
+  createOption(event){
+    event.preventDefault();
+    logger("createOption was called");
+    let options = this.state.optionsAndValues;
+    let index;
+    if (options!=null){
+      index = options.length
+    }
+    else {
+      index = 0;
+    }
+    let option = this.state.iOption;
+    let food = this.state.iFood;
+    let newEntry = [index,option,food];
+    if(food.length>0&&option.length>0){
+      if(options!=null){
+        options.push(newEntry);
+      }
+      else {
+        options=[newEntry];
+      }
+    }
+    logger(options);
+    this.setState({optionsAndValues: options});
+    if(!this.state.optionsExist){
+      this.setState({optionsExist: true});
+    }
+  }
+
+  deleteOption(event){
+    event.preventDefault();
+    let index = this.state.selectedOption;
+    let options = this.state.optionsAndValues;
+    if (options.length>1){
+      options.splice(index, 1);
+      this.setState({optionsAndValues: options, selectedOption: 0});
+    }
+    else {
+      options=null;
+      this.setState({optionsAndValues: options, optionsExist: false});
+    }
+
+
+  }
+
+  renderOptions(){
+    if (this.state.optionsExist){
+      return(
+      <p>
+        <label htmlFor="select">Select a food option </label>
+        <br></br>
+        <select onChange={this.changeOption} value={this.state.selectedOption} id="select">
+          <optgroup label="Your Options">
+            {this.state.optionsAndValues.map((tuple) =>
+              <option key={tuple[0]} value={tuple[0]}>{tuple[1]}</option>
+            )}
+          </optgroup>
+        </select>
+        {" "+this.state.optionsAndValues[this.state.selectedOption][2]+" "}
+        <button onClick={this.deleteOption}>Delete this option</button>
+      </p>
+    );
+    }
+    else return null;
+  }
+
+  render(){
+    let renderedOptions =this.renderOptions();
+    let content =
+    <div>
+    {renderedOptions}
+    <p>
+      {"Add a new option!"}
+      <br></br>
+      <label htmlFor="input__foodOption">Option name: </label>
+      <input id="input__foodOption" type="text" placeholder="Text Input" value={this.state.iOption} onChange={this.handleChange}/>
+      <label htmlFor="input__food"> Food name: </label>
+      <input id="input__food" type="text" placeholder="Text Input" value={this.state.iFood} onChange={this.handleChange}/>
+      <button onClick={this.createOption}>Create this option</button>
+    </p>
+    </div>
+
+    return(
+      <AFormTemplate identifier={this.props.identifier} desc={this.props.desc} content={content}/>
     );
   }
 }
@@ -549,5 +669,6 @@ export {
   AEmbeddedProgress,
   AEmbeddedSvg,
   AEmbeddedIFrame,
-  AInputText
+  AInputText,
+  AInputSelect
 }

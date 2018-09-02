@@ -2,7 +2,6 @@ import logger from "./Logger.js";
 
 //returns the id and desc of a section
 let getSectionInfo = function(hierarchy, json, fullId="", firstIteration=false){
-  logger(json);
   if (!firstIteration){
     fullId+=json.id+"__";
   }
@@ -10,7 +9,6 @@ let getSectionInfo = function(hierarchy, json, fullId="", firstIteration=false){
   if (hierarchy===null){
     fullId = fullId.substring(0, fullId.length-2);
     let desc = json.desc;
-    logger("returning id|desc = "+fullId+"|"+desc);
     return [fullId, desc];
   }
   else{

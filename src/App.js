@@ -49,7 +49,10 @@ class App extends Component {
           </section>
           <section id={this.id([2])}>
             <header><h1>{this.desc([2])}</h1></header>
+            <form>
             <Articles.AInputText identifier={this.id([2,0])} desc={this.desc([2,0])}/>
+            <Articles.AInputSelect identifier={this.id([2,1])} desc={this.desc([2,1])}/>
+            </form>
           </section>
         </main>
       </div>
