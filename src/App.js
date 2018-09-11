@@ -52,6 +52,8 @@ class App extends Component {
             <form>
             <Articles.AInputText identifier={this.id([2,0])} desc={this.desc([2,0])}/>
             <Articles.AInputSelect identifier={this.id([2,1])} desc={this.desc([2,1])}/>
+            <Articles.AInputCheckbox identifier={this.id([2,2])} desc={this.desc([2,2])}/>
+            <Articles.AInputRadio identifier={this.id([2,3])} desc={this.desc([2,3])}/>
             </form>
           </section>
         </main>

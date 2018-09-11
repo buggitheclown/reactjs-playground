@@ -414,12 +414,36 @@ class AEmbeddedProgress extends Component{
 }
 
 class AEmbeddedSvg extends Component{
+  constructor(props){
+    super(props);
+
+    this.state = ({x1: 0, x2: 1, y1: 0, y2: 1});
+    this.randomizeSvg = this.randomizeSvg.bind(this);
+  }
+
+  componentDidMount(){
+    var interval = setInterval(this.randomizeSvg, 2000);
+    this.setState({interval: interval});
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.state.interval);
+  }
+
+  randomizeSvg(){
+    let x1 = Math.random().toFixed(2);
+    let x2 = Math.random().toFixed(2);
+    let y1 = Math.random().toFixed(2);
+    let y2 = Math.random().toFixed(2);
+    this.setState({x1: x1, x2: x2, y1: y1, y2: y2});
+  }
+
   render(){
     let content =
     <div>
     <svg width="200px" height="200px">
     <defs>
-    <linearGradient id="Gradient2" x1="0" x2="0.75" y1="0" y2="0.3">
+    <linearGradient id="Gradient2" x1={this.state.x1} x2={this.state.x2} y1={this.state.y1} y2={this.state.y2}>
         <stop offset="0%" stopColor="red"/>
         <stop offset="50%" stopColor="black" stopOpacity="0"/>
         <stop offset="100%" stopColor="blue"/>
@@ -564,7 +588,6 @@ class AInputSelect extends Component{
 
   createOption(event){
     event.preventDefault();
-    logger("createOption was called");
     let options = this.state.optionsAndValues;
     let index;
     if (options!=null){
@@ -584,7 +607,6 @@ class AInputSelect extends Component{
         options=[newEntry];
       }
     }
-    logger(options);
     this.setState({optionsAndValues: options});
     if(!this.state.optionsExist){
       this.setState({optionsExist: true});
@@ -650,6 +672,172 @@ class AInputSelect extends Component{
   }
 }
 
+class AInputCheckbox extends Component{
+  constructor(props){
+    super(props);
+    this.state = ({c1: false, c2: true, c3: false})
+
+    this.toggleBoxes = this.toggleBoxes.bind(this);
+  }
+
+  toggleBoxes(event){
+    event.preventDefault();
+    let c1;
+    let c2;
+    let c3;
+    switch (event.target.id){
+      case "checkbox1":
+      c1 = this.state.c1;
+      c2 = !this.state.c2;
+      c3 = false;
+      break;
+      case "checkbox2":
+      c1 = true;
+      c2 = true;
+      c3 = this.state.c2;
+      break;
+      case "checkbox3":
+      c1 = false;
+      c2 = !this.state.c1;
+      c3 = !this.state.c1&&this.state.c3;
+      break;
+    }
+    this.setState({c1: c1, c2: c2, c3: c3});
+  }
+
+  render(){
+    let content =
+    <ul className="list list--bare">
+      <li><label htmlFor="checkbox1"><input id="checkbox1" name="checkbox" type="checkbox" checked={this.state.c1} onChange={this.toggleBoxes}/> Choice A</label></li>
+      <li><label htmlFor="checkbox2"><input id="checkbox2" name="checkbox" type="checkbox" checked={this.state.c2} onChange={this.toggleBoxes}/> Choice B</label></li>
+      <li><label htmlFor="checkbox3"><input id="checkbox3" name="checkbox" type="checkbox" checked={this.state.c3} onChange={this.toggleBoxes}/> Choice C</label></li>
+    </ul>
+    return(
+      <AFormTemplate identifier={this.props.identifier} desc={this.props.desc} content={content}/>
+    );
+  }
+}
+
+class AInputRadio extends Component{
+  constructor(props){
+    super(props);
+    this.state = ({options: ["1","2","3","4"], checked: [false, true, false, false, false, false, false, false, false, false, false, false],
+    desc: ["Option 1","Option 2","Option 3","Option 4","Option 5","6","Option 7","Option 8","6","6"], sixCounter: 0, imageOn: false});
+
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(event){
+    event.preventDefault();
+    let options;
+    let checked;
+    let desc = this.state.desc;
+    let sixCounter = this.state.sixCounter;
+    switch(event.target.id.substring(5)){
+      case "1":
+      options = ["1","8"];
+      checked = [true, false, false, false, false, false, false, false, false, false];
+      break;
+      case "2":
+      options = ["1","2","3","4","5","6","7","8"];
+      checked = [false, true, false, false, false, false, false, false, false, false];
+      break;
+      case "3":
+      options = ["1","3","6","7","8"];
+      checked = [false, false, true, false, false, false, false, false, false, false];
+      break;
+      case "4":
+      options = ["4","5"];
+      checked = [false, false, false, true, false, false, false, false, false, false];
+      break;
+      case "5":
+      options = ["1","4","5","7"];
+      checked = [false, false, false, false, true, false, false, false, false, false];
+      break;
+      case "6":
+      options = ["6","9","10"];
+      checked = [false, false, false, false, false, true, false, false, false, false];
+      sixCounter===null ? sixCounter=1 : sixCounter++;
+      if (sixCounter===3){
+        options = ["1","2","3","4","5","6","7","8"];
+        checked = [false, false, false, false, false, true, false, false, false, false];
+        desc = ["Why","Have","You","Done","This","B̷̧̗̼̖̈́͌̓͛̀̂̊͑̅͑͌̓̋̇͝r̷̭̦̖̥͗̂̈̍̏͆͂̅̚o̶̫͔̜̯̺̞̹̺͙͉̩̔͊̂̈̽̏̃͛́̅͆̈́͝ṯ̸̨̢̯̜̳͕̱͙̝̫̜̻͂͑͜ͅh̸̡͓̭̑͘é̸̠̫̻̹̪͉̩̮̙̦̐̊͒̓͗̃̊̓̇̌̍̇̎r̶͙̺̦̼͖͉͖͚̟̿̉͊","Run","Now","6","6"];
+        this.setState({imageOn: true});
+      }
+      else{
+        this.setState({sixCounter: sixCounter});
+      }
+      break;
+      case "7":
+      options = ["7","8"];
+      checked = [false, false, false, false, false, false, true, false, false, false];
+      break;
+      case "8":
+      options = ["2","8"];
+      checked = [false, false, false, false, false, false, false, true, false, false];
+      break;
+      case "9":
+      options = ["6","9","10"];
+      checked = [false, false, false, false, false, false, false, false, true, false];
+      sixCounter = this.state.sixCounter +1;
+      if (sixCounter===3){
+        options = ["1","2","3","4","5","6","7","8"];
+        checked = [false, false, false, false, false, true, false, false, false, false];
+        desc = ["Why","Have","You","Done","This","B̷̧̗̼̖̈́͌̓͛̀̂̊͑̅͑͌̓̋̇͝r̷̭̦̖̥͗̂̈̍̏͆͂̅̚o̶̫͔̜̯̺̞̹̺͙͉̩̔͊̂̈̽̏̃͛́̅͆̈́͝ṯ̸̨̢̯̜̳͕̱͙̝̫̜̻͂͑͜ͅh̸̡͓̭̑͘é̸̠̫̻̹̪͉̩̮̙̦̐̊͒̓͗̃̊̓̇̌̍̇̎r̶͙̺̦̼͖͉͖͚̟̿̉͊","Run","Now","6","6"];
+        this.setState({imageOn: true});
+      }
+      else{
+        this.setState({sixCounter: sixCounter});
+      }
+      break;
+      case "10":
+      options = ["6","9","10"];
+      checked = [false, false, false, false, false, false, false, false, false, true];
+      sixCounter = this.state.sixCounter +1;
+      if (sixCounter===3){
+        options = ["1","2","3","4","5","6","7","8"];
+        checked = [false, false, false, false, false, true, false, false, false, false];
+        desc = ["Why","Have","You","Done","This","B̷̧̗̼̖̈́͌̓͛̀̂̊͑̅͑͌̓̋̇͝r̷̭̦̖̥͗̂̈̍̏͆͂̅̚o̶̫͔̜̯̺̞̹̺͙͉̩̔͊̂̈̽̏̃͛́̅͆̈́͝ṯ̸̨̢̯̜̳͕̱͙̝̫̜̻͂͑͜ͅh̸̡͓̭̑͘é̸̠̫̻̹̪͉̩̮̙̦̐̊͒̓͗̃̊̓̇̌̍̇̎r̶͙̺̦̼͖͉͖͚̟̿̉͊","Run","Now","6","6"];
+        this.setState({imageOn: true});
+      }
+      else{
+        this.setState({sixCounter: sixCounter});
+      }
+      break;
+    }
+    this.setState({options: options, checked: checked, desc: desc});
+  }
+
+  render(){
+    let image;
+    if (this.state.imageOn){
+      image = <img src="https://i.kym-cdn.com/photos/images/newsfeed/000/601/591/9c3.gif" alt="Alt text"/>
+    }
+    let defaultDesc = "Option ";
+    let content =
+    <ul className="list list--bare">
+      {this.state.options.map((option)=>
+        <li><label htmlFor={"radio"+option}><input id={"radio"+option} name="radio" type="radio" className="radio" checked={this.state.checked[parseInt(option)-1]} onChange={this.handleChange}/> {this.state.desc[parseInt(option)-1]} </label></li>
+      )}
+      {image}
+    </ul>
+    return(
+      <AFormTemplate identifier={this.props.identifier} desc={this.props.desc} content={content}/>
+    );
+  }
+}
+
+/*
+class AEmbeddedVideo extends Component{
+  render(){
+    let content =
+    <div><video controls src="http://file-examples.com/wp-content/uploads/2017/04/file_example_MP4_480_1_5MG.mp4">video</video></div>
+    return(
+      <ATemplate identifier={this.props.identifier} desc={this.props.desc} content={content}/>
+    );
+  }
+}
+*/
 
 export {
   ATextHeadings,
@@ -670,5 +858,7 @@ export {
   AEmbeddedSvg,
   AEmbeddedIFrame,
   AInputText,
-  AInputSelect
+  AInputSelect,
+  AInputCheckbox,
+  AInputRadio
 }
