@@ -817,7 +817,7 @@ class AInputRadio extends Component{
     let content =
     <ul className="list list--bare">
       {this.state.options.map((option)=>
-        <li><label htmlFor={"radio"+option}><input id={"radio"+option} name="radio" type="radio" className="radio" checked={this.state.checked[parseInt(option)-1]} onChange={this.handleChange}/> {this.state.desc[parseInt(option)-1]} </label></li>
+        <li key={"radio"+option}><label htmlFor={"radio"+option}><input id={"radio"+option} name="radio" type="radio" className="radio" checked={this.state.checked[parseInt(option)-1]} onChange={this.handleChange}/> {this.state.desc[parseInt(option)-1]} </label></li>
       )}
       {image}
     </ul>
@@ -827,17 +827,152 @@ class AInputRadio extends Component{
   }
 }
 
-/*
-class AEmbeddedVideo extends Component{
+class AInputTextareas extends Component{
+  constructor(props){
+    super(props);
+
+    this.state = ({input: ""});
+    this.handleInput = this.handleInput.bind(this);
+  }
+
+  handleInput(event){
+    if (event.target.value.length>this.state.input.length){
+      let newChar = event.target.value.slice(-1);
+      if (newChar.match(/[a-z]/i)){
+        let randomizer = Math.floor(Math.random() * 2);
+        if (randomizer===0){
+          newChar = newChar.toUpperCase();
+        }
+        else{
+          newChar = newChar.toLowerCase();
+        }
+      }
+      let newValue = this.state.input+newChar;
+      this.setState({input: newValue});
+    }
+    else {
+      this.setState({input: event.target.value});
+    }
+  }
+
   render(){
     let content =
-    <div><video controls src="http://file-examples.com/wp-content/uploads/2017/04/file_example_MP4_480_1_5MG.mp4">video</video></div>
+    <p>
+      <label htmlFor="textarea">Textarea</label>
+      <textarea id="textarea" rows="8" cols="48" placeholder="Enter your message here" onChange={this.handleInput} value={this.state.input}></textarea>
+    </p>
     return(
-      <ATemplate identifier={this.props.identifier} desc={this.props.desc} content={content}/>
+      <AFormTemplate identifier={this.props.identifier} desc={this.props.desc} content={content}/>
     );
   }
 }
-*/
+
+class AInputHtml5 extends Component{
+  constructor(props){
+    super(props);
+
+    this.state = ({color: "#000000", number: 5 ,range: 10, rangeMax: 100, date: "1970-01-01",
+    month: "1970-01", week: "1970-W01", dateTime: "1970-01-01T00:00:00Z", dateTimeLocal: "1970-01-01T00:00"});
+    this.handleInput = this.handleInput.bind(this);
+  }
+
+  handleInput(event){
+    switch (event.target.id){
+      case "ic":
+      this.setState({color: event.target.value});
+      break;
+      case "in":
+      this.setState({number: event.target.value});
+      break;
+      case "ir":
+      let rangeIncrease = event.target.value-this.state.range;
+      let newMax = this.state.rangeMax+rangeIncrease;
+      this.setState({range: event.target.value, rangeMax: newMax});
+      break;
+      case "idd":
+      this.setState({date: event.target.value});
+      break;
+      case "idm":
+      this.setState({month: event.target.value});
+      break;
+      case "idw":
+      this.setState({week: event.target.value});
+      break;
+      case "idt":
+      this.setState({dateTime: event.target.value});
+      break;
+      case "idtl":
+      this.setState({dateTimeLocal: event.target.value});
+      break;
+    }
+  }
+
+  render(){
+    let content =
+    <div>
+    <p>
+      <label htmlFor="ic">Color input</label>
+      <input type="color" id="ic" value={this.state.color} onChange={this.handleInput}/>
+    </p>
+    <p>
+      <label htmlFor="in">Number input</label>
+      <input type="number" id="in" min="0" max="10" value={this.state.number} onChange={this.handleInput}/>
+    </p>
+    <p>
+      <label htmlFor="ir">Range input</label>
+      <input type="range" id="ir" value={this.state.range} min="0" max={this.state.rangeMax} onChange={this.handleInput}/>
+      Range = {this.state.range}
+    </p>
+    <p>
+      <label htmlFor="idd">Date input</label>
+      <input type="date" id="idd" value={this.state.date} onChange={this.handleInput}/>
+    </p>
+    <p>
+      <label htmlFor="idm">Month input</label>
+      <input type="month" id="idm" value={this.state.month} onChange={this.handleInput}/>
+    </p>
+    <p>
+      <label htmlFor="idw">Week input</label>
+      <input type="week" id="idw" value={this.state.week} onChange={this.handleInput}/>
+    </p>
+    <p>
+      <label htmlFor="idt">Datetime input</label>
+      <input type="datetime" id="idt" value={this.state.dateTime} onChange={this.handleInput}/>
+    </p>
+    <p>
+      <label htmlFor="idtl">Datetime-local input</label>
+      <input type="datetime-local" id="idtl" value={this.state.dateTimeLocal} onChange={this.handleInput}/>
+    </p>
+  </div>
+    return(
+      <AFormTemplate identifier={this.props.identifier} desc={this.props.desc} content={content}/>
+    );
+  }
+}
+
+
+class AInputActionForms extends Component{
+  render(){
+    let content =
+    <div>
+      <p>
+        <input type="submit" value="submit"/>
+        <input type="button" value="button"/>
+        <input type="reset" value="reset"/>
+        <input type="submit" value="disabled" disabled />
+      </p>
+      <p>
+        <button type="submit">submit</button>
+        <button type="button">button</button>
+        <button type="reset">reset</button>
+        <button type="button" disabled>disabled</button>
+      </p>
+    </div>
+    return(
+      <AFormTemplate identifier={this.props.identifier} desc={this.props.desc} content={content}/>
+    );
+  }
+}
 
 export {
   ATextHeadings,
@@ -860,5 +995,8 @@ export {
   AInputText,
   AInputSelect,
   AInputCheckbox,
-  AInputRadio
+  AInputRadio,
+  AInputTextareas,
+  AInputHtml5,
+  AInputActionForms
 }

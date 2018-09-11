@@ -54,6 +54,9 @@ class App extends Component {
             <Articles.AInputSelect identifier={this.id([2,1])} desc={this.desc([2,1])}/>
             <Articles.AInputCheckbox identifier={this.id([2,2])} desc={this.desc([2,2])}/>
             <Articles.AInputRadio identifier={this.id([2,3])} desc={this.desc([2,3])}/>
+            <Articles.AInputTextareas identifier={this.id([2,4])} desc={this.desc([2,4])}/>
+            <Articles.AInputHtml5 identifier={this.id([2,5])} desc={this.desc([2,5])}/>
+            <Articles.AInputActionForms identifier={this.id([2,6])} desc={this.desc([2,6])}/>
             </form>
           </section>
         </main>
