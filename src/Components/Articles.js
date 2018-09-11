@@ -998,5 +998,5 @@ export {
   AInputRadio,
   AInputTextareas,
   AInputHtml5,
-  //AInputActionForms
+  AInputActionForms
 }
